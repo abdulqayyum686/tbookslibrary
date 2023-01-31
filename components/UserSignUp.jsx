@@ -3,15 +3,21 @@ import { useRouter } from "next/router";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useForm } from "react-hook-form";
+import { signupUser } from "../utils/hooks";
+
 const UserSignUp = () => {
   const router = useRouter();
+  const { mutate: UserSignUp } = signupUser();
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) => {
+    UserSignUp(data);
+    router.push("/login")
+  };
 
   return (
     <>
@@ -27,7 +33,7 @@ const UserSignUp = () => {
           <div className="flex-col gap-2 flex w-[26rem]">
             <div className="bg-black bg-opacity-30 rounded pr-3">
               <input
-              placeholder="user email"
+                placeholder="user email"
                 {...register("email", { required: true, maxLength: 100 })}
                 className="w-full autofill-none text-[#82354f] placeholder:text-[#82354f] bg-transparent outline-none p-3 required-cstm-inp"
               />
@@ -37,7 +43,7 @@ const UserSignUp = () => {
             )}
             <div className="bg-black bg-opacity-30 rounded pr-3">
               <input
-              placeholder="user name"
+                placeholder="user name"
                 {...register("userName", { required: true, maxLength: 100 })}
                 className="w-full autofill-none text-[#82354f] placeholder:text-[#82354f] bg-transparent outline-none p-3 required-cstm-inp"
               />
@@ -47,7 +53,7 @@ const UserSignUp = () => {
             )}
             <div className="bg-black bg-opacity-30 rounded pr-3">
               <input
-              placeholder="user password"
+                placeholder="user password"
                 {...register("password", { required: true, maxLength: 100 })}
                 className="w-full autofill-none text-[#82354f] placeholder:text-[#82354f] bg-transparent outline-none p-3 required-cstm-inp"
               />

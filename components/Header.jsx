@@ -1,7 +1,34 @@
 import React from "react";
 import Link from "next/link";
+import { useQuery, useMutation } from "react-query";
+import { fetchData } from "@/utils/apifunctions";
+import jwt_decode from "jwt-decode";
+import Cookies from "universal-cookie";
+import { headersArray } from "@/utils/headerArray";
+const cookies = new Cookies();
+import { useRouter } from "next/router";
 
 const Header = () => {
+  const router = useRouter();
+  let token = cookies.get("usertoken");
+  if (token) {
+    var decoded = jwt_decode(token);
+  }
+  const { isLoading, data: currentUser } = useQuery(
+    "get-curentuser-user",
+    async () => {
+      return fetchData(
+        `http://localhost:3000/api/user/get-current-user/${decoded?._id}`
+      );
+    }
+  );
+  console.log("currentuser===", currentUser);
+  const moveNext = (url, title) => {
+    if (title === "Logout") {
+      cookies.remove("usertoken");
+    }
+    router.push(url);
+  };
   return (
     <nav className="bg-gray-800">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -16,44 +43,28 @@ const Header = () => {
             </div>
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
-                <Link
-                  href="/"
-                  className="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
-                  aria-current="page"
-                >
-                  Dashboard
-                </Link>
-                <Link
-                  href="addbook"
-                  className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
-                >
-                  Add Book
-                </Link>
-                <Link
-                  href="/login"
-                  className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
-                >
-                  Login
-                </Link>
-                <Link
-                  href="/signup"
-                  className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
-                >
-                  Register
-                </Link>
-                <Link
-                  href="/login"
-                  className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
-                >
-                  Logout
-                </Link>
+                {headersArray(currentUser?.data?.result?.userName)?.map(
+                  ({ title, url }, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className=" text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer hover:bg-gray-700 hover:text-white"
+                        onClick={() => moveNext(url, title)}
+                      >
+                        {title}
+                      </div>
+                    );
+                  }
+                )}
               </div>
             </div>
           </div>
           <div className="hidden md:block">
             <div className="ml-4 flex items-center md:ml-6">
               <div className="relative ml-3">
-                <div className="text-white">abdul qayyum</div>
+                <div className="text-white">
+                  {currentUser?.data?.result?.userName}
+                </div>
               </div>
             </div>
           </div>
@@ -62,45 +73,25 @@ const Header = () => {
 
       <div className="md:hidden" id="mobile-menu">
         <div className="space-y-1 px-2 pt-2 pb-3 sm:px-3">
-          <Link
-            href="/"
-            className="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium"
-            aria-current="page"
-          >
-            Dashboard
-          </Link>
-
-          <Link
-            href="addbook"
-            className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-          >
-            Add Book
-          </Link>
-          <Link
-            href="/login"
-            className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-          >
-            Login
-          </Link>
-          <Link
-            href="/signup"
-            className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-          >
-            Register
-          </Link>
-
-          <Link
-            href="/login"
-            className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-          >
-            logout
-          </Link>
+          {headersArray(currentUser?.data?.result?.userName)?.map(
+            ({ title, url }, index) => {
+              return (
+                <div
+                  key={index}
+                  className=" text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer hover:bg-gray-700 hover:text-white"
+                  onClick={() => moveNext(url, title)}
+                >
+                  {title}
+                </div>
+              );
+            }
+          )}
         </div>
         <div className="border-t border-gray-700 pt-4 pb-3">
           <div className="flex items-center px-5">
             <div className="ml-3">
               <div className="text-sm font-medium leading-none text-gray-400">
-                tom@example.com
+                {currentUser?.data?.result?.userName}
               </div>
             </div>
           </div>

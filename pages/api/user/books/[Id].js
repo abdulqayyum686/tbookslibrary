@@ -1,10 +1,11 @@
-import Books from "../../../models/Books";
-import dbConnect from "../../../config/dbConnect";
+import Books from "../../../../models/Books";
+import dbConnect from "../../../../config/dbConnect";
 const booksController = async (req, res) => {
   const { title } = req.body;
   await dbConnect();
   console.log(req.method);
   if (req.method === "POST") {
+    console.log("addBook",req.body);
     try {
       const isExists = await Books.findOne({ title }).exec();
       console.log(isExists);
@@ -49,10 +50,10 @@ const booksController = async (req, res) => {
       });
     }
   } else if (req.method === "DELETE") {
-    console.log("userId", req.body._id);
+    console.log("Id", req.query.Id);
     try {
       let result = await Books.findOneAndDelete({
-        _id: req.body._id.toString(),
+        _id: req.query.Id.toString(),
       });
 
       if (result) {
@@ -68,7 +69,7 @@ const booksController = async (req, res) => {
     }
   } else if (req.method === "GET") {
     try {
-      let result = await Books.find();
+      let result = await Books.find({ userId: req.query.Id });
       if (result) {
         res.status(200).json({
           result,

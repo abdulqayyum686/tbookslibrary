@@ -1,11 +1,17 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
+import jwt_decode from "jwt-decode";
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
+import { useAddSuperheroData, EditBook } from "@/utils/hooks";
 
 const AddBook = () => {
+  var decoded = jwt_decode(cookies.get("usertoken"));
   const router = useRouter();
   const data = router.query;
-  console.log(data);
+  console.log(data, "ali raza");
+  const book = JSON.parse(router?.query?.book || "{}");
 
   const {
     register,
@@ -13,8 +19,16 @@ const AddBook = () => {
     watch,
     formState: { errors },
   } = useForm();
+  const { mutate: editbook } = EditBook();
+  const { mutate: addBook } = useAddSuperheroData();
 
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data2) => {
+    if (book) {
+      editbook({ ...data2, _id: book?._id });
+    } else {
+      addBook({ ...data2, userId: decoded?._id, type: "ptr" });
+    }
+  };
 
   return (
     <div className="h-[90vh] w-full  bg-cover flex items-center justify-center flex-col gap-4">
@@ -31,6 +45,7 @@ const AddBook = () => {
           <div className="bg-black bg-opacity-30 rounded pr-3">
             <input
               placeholder="book title"
+              defaultValue={book.title}
               {...register("title", { required: true, maxLength: 100 })}
               className="w-full autofill-none text-[#82354f] placeholder:text-[#82354f] bg-transparent outline-none p-3 required-cstm-inp"
             />
@@ -40,6 +55,7 @@ const AddBook = () => {
           )}
           <div className="bg-black bg-opacity-30 rounded pr-3">
             <input
+              defaultValue={book.authorName}
               placeholder="book author name"
               {...register("authorName", { required: true, maxLength: 100 })}
               className="w-full autofill-none text-[#82354f] placeholder:text-[#82354f] bg-transparent outline-none p-3 required-cstm-inp"
@@ -51,6 +67,7 @@ const AddBook = () => {
 
           <div className="bg-black bg-opacity-30 rounded pr-3">
             <input
+              defaultValue={book.publicationHouse}
               placeholder="book  publication house"
               {...register("publicationHouse", {
                 required: true,
@@ -65,6 +82,7 @@ const AddBook = () => {
 
           <div className="bg-black bg-opacity-30 rounded pr-3">
             <input
+              defaultValue={book.Genre}
               placeholder="book genre"
               {...register("Genre", { required: true, maxLength: 100 })}
               className="w-full autofill-none text-[#82354f] placeholder:text-[#82354f] bg-transparent outline-none p-3 required-cstm-inp"
@@ -75,6 +93,8 @@ const AddBook = () => {
           )}
           <div className="bg-black bg-opacity-30 rounded pr-3">
             <input
+              type="date"
+              defaultValue={book.createdAt}
               placeholder="book publication date"
               {...register("publicationDate", {
                 required: true,
