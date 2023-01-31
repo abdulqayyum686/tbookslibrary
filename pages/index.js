@@ -22,7 +22,7 @@ export default function Home() {
     "get-user-books",
     async () => {
       return fetchData(
-        "http://localhost:3000/api/user/books/63d641b75e09e252d0d44346"
+        "/api/user/books/63d641b75e09e252d0d44346"
       );
     }
   );
@@ -47,7 +47,7 @@ export default function Home() {
   }
   return (
     <>
-      {/* <Header /> */}
+      <Header />
       <div className="min-h-full">
         <header className="bg-white shadow">
           <div className="mx-auto max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
@@ -171,5 +171,5 @@ export default function Home() {
         </main>
       </div>
     </>
-  );
+  )
 }

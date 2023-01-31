@@ -18,7 +18,7 @@ const UserLogin = () => {
   } = useForm();
   const { mutate, isLoading } = useMutation(
     (data) => {
-      return postData("http://localhost:3000/api/user/login", data);
+      return postData("/api/user/login", data);
     },
     {
       onSuccess: (data) => {

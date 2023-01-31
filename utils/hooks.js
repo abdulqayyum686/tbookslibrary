@@ -2,25 +2,25 @@ import { useMutation } from "react-query";
 import { deleteData, postData, updateData } from "./apifunctions";
 
 const addBook = (bookdetails) => {
-  return postData("http://localhost:3000/api/user/books/addbook", bookdetails);
+  return postData("/api/user/books/addbook", bookdetails);
 };
 const UserSignUp = (userData) => {
-  return postData("http://localhost:3000/api/user/register", userData);
+  return postData("/api/user/register", userData);
 };
 const changeBookStatus = (bookdetails) => {
   return updateData(
-    "http://localhost:3000/api/user/books/specificbook",
+    "/api/user/books/specificbook",
     bookdetails
   );
 };
 const editbook = (bookdetails) => {
   return updateData(
-    "http://localhost:3000/api/user/books/specificbook",
+    "/api/user/books/specificbook",
     bookdetails
   );
 };
 const deleteBookData = (bookdetails) => {
-  return deleteData(`http://localhost:3000/api/user/books/${bookdetails._id}`);
+  return deleteData(`/api/user/books/${bookdetails._id}`);
 };
 
 export const useAddSuperheroData = () => {

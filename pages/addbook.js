@@ -5,7 +5,7 @@ import React from "react";
 const Addbook = () => {
   return (
     <div>
-      {/* <Header /> */}
+      <Header />
       <AddBook />
     </div>
   );

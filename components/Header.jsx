@@ -18,7 +18,7 @@ const Header = () => {
     "get-curentuser-user",
     async () => {
       return fetchData(
-        `http://localhost:3000/api/user/get-current-user/${decoded?._id}`
+        `/api/user/get-current-user/${decoded?._id}`
       );
     }
   );

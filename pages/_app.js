@@ -8,17 +8,18 @@ import Cookies from "universal-cookie";
 const cookies = new Cookies();
 
 export default function App({ Component, pageProps }) {
-  var token = cookies.get("usertoken");
   const router = useRouter();
   const queryClient = new QueryClient();
+  let token = cookies.get("usertoken");
+
   useEffect(() => {
     if (!token) {
       router.push("/login");
     }
   }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
-      {token && <Header />}
       <Component {...pageProps} />;
       <ReactQueryDevtools />
     </QueryClientProvider>

@@ -7,11 +7,14 @@ const cookies = new Cookies();
 import { useAddSuperheroData, EditBook } from "@/utils/hooks";
 
 const AddBook = () => {
-  var decoded = jwt_decode(cookies.get("usertoken"));
+  let token = cookies.get("usertoken");
+  if (token) {
+    var decoded = jwt_decode(token);
+  }
   const router = useRouter();
   const data = router.query;
-  console.log(data, "ali raza");
   const book = JSON.parse(router?.query?.book || "{}");
+  // console.log(Object.keys(book), "ali raza");
 
   const {
     register,
@@ -24,9 +27,9 @@ const AddBook = () => {
 
   const onSubmit = (data2) => {
     if (book) {
-      editbook({ ...data2, _id: book?._id });
+      // editbook({ ...data2, _id: book?._id });
     } else {
-      addBook({ ...data2, userId: decoded?._id, type: "ptr" });
+      // addBook({ ...data2, userId: decoded?._id, type: "ptr" });
     }
   };
 
