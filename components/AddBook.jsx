@@ -14,7 +14,7 @@ const AddBook = () => {
   const router = useRouter();
   const data = router.query;
   const book = JSON.parse(router?.query?.book || "{}");
-  // console.log(Object.keys(book), "ali raza");
+  console.log(Object.keys(book), "ali raza");
 
   const {
     register,
@@ -26,10 +26,10 @@ const AddBook = () => {
   const { mutate: addBook } = useAddSuperheroData();
 
   const onSubmit = (data2) => {
-    if (book) {
-      // editbook({ ...data2, _id: book?._id });
+    if (Object.keys(book).length != 0) {
+      editbook({ ...data2, _id: book?._id });
     } else {
-      // addBook({ ...data2, userId: decoded?._id, type: "ptr" });
+      addBook({ ...data2, userId: decoded?._id, type: "ptr" });
     }
   };
 
